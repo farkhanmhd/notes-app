@@ -1,4 +1,18 @@
-# React + Vite
+# A simple Notes application made with React + Vite + Tailwind
+
+What you can do in this Notes Application?
+
+- Adding note
+- Saving note
+- Archive note (not finished)
+- Delete note (not finished)
+- Search note (not finished)
+- Text Formatting, coloring, listing (not finished)
+- Change background (not finished)
+
+Other feature:
+
+- Dark mode (not finished)
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
