@@ -26,11 +26,7 @@ const Note = ({ note, type }) => {
   };
 
   return (
-    <Link
-      to={
-        type === "active" ? `/notes/${note.id}` : `/notes/archived/${note.id}`
-      }
-    >
+    <Link to={type === "active" ? `/notes/${note.id}` : `/archived/${note.id}`}>
       <div className="bg-slate-100 w-full h-full rounded-3xl shadow-md hover:shadow-xl cursor-pointer duration-300 text-gray-800 py-6 px-8 overflow-hidden flex flex-col">
         <h2 className=" text-2xl mb-1 font-bold">{note.title}</h2>
         <p className="text-sm">{formattedDate(note.createdAt)}</p>
