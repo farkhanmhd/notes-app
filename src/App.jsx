@@ -12,9 +12,8 @@ const App = () => {
   if (location.pathname === "/") return <Navigate to="/notes" />;
 
   const isRouteMatched =
-    location.pathname.startsWith("/archived") ||
-    location.pathname.startsWith("/notes") ||
-    location.pathname.match(/^\/notes\/\d+$/);
+    /^\/archived($|\/)/.test(location.pathname) ||
+    /^\/notes($|\/)/.test(location.pathname);
 
   return (
     <>
@@ -26,6 +25,7 @@ const App = () => {
               <Route path="/notes" element={<NotesPage />} />
               <Route path="/notes/new" element={<NewNotesPage />} />
               <Route path="/archived" element={<ArchivedPage />} />
+              <Route path="/error" element={<NotFoundPage />} />
               <Route path="/notes/:id" element={<NotesDetailPage />} />
             </Routes>
           </>

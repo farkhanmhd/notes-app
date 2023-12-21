@@ -9,7 +9,7 @@ const NotFoundPage = () => {
         to={"/notes/"}
         className="bg-gray-100 text-gray-900 px-5 py-2 rounded-lg duration-[250ms] hover:bg-gray-300"
       >
-        Back to HomePage
+        Go to HomePage
       </Link>
     </div>
   );
