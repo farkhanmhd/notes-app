@@ -5,7 +5,7 @@ const ControlButton = ({ onClick, children, controlState }) => {
     <button
       onClick={onClick}
       className={`flex justify-center items-center text-2xl rounded-lg p-2 duration-[250ms] ${
-        !controlState ? "hover:bg-slate-300" : ""
+        !controlState ? "hover:bg-slate-200" : ""
       }`}
       disabled={controlState}
     >

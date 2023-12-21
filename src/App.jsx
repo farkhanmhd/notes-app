@@ -27,6 +27,7 @@ const App = () => {
               <Route path="/archived" element={<ArchivedPage />} />
               <Route path="/error" element={<NotFoundPage />} />
               <Route path="/notes/:id" element={<NotesDetailPage />} />
+              <Route path="/archived/:id" element={<NotesDetailPage />} />
             </Routes>
           </>
         ) : (

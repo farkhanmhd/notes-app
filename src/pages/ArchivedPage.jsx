@@ -1,43 +1,10 @@
-import Note from "../components/Notes/Note";
 import { useNotes } from "../context/NotesContext";
-import parser from "html-react-parser";
-import { Link } from "react-router-dom";
+import NotesList from "../components/Notes/NotesList";
 
 const ArchivedPage = () => {
-  const { notes } = useNotes();
+  const { getAllArchivedNotes } = useNotes();
 
-  return notes.filter((note) => note.archived).length > 0 ? (
-    <>
-      <h2 className="text-4xl text-gray-800 pt-10  pl-10">Active Notes List</h2>
-      <div className="grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-10 p-10 w-[calc(100vw - 75px)] lg:w-[calc(100vw - 300px)]">
-        {notes
-          .filter((note) => note.archived)
-          .map((note) => {
-            return (
-              <Note
-                key={note.id}
-                id={note.id}
-                title={note.title}
-                date={note.createdAt}
-                body={parser(note.body)}
-              />
-            );
-          })}
-      </div>
-    </>
-  ) : (
-    <div className="w-[calc(100vw - 75px)] lg:w-[calc(100vw - 300px)] h-screen flex flex-col justify-center items-center gap-5">
-      <h1 className="text-3xl text-gray-800 font-bold">
-        There are no archived notes
-      </h1>
-      <Link
-        to={"/notes/new"}
-        className="bg-gray-100 text-gray-900 px-5 py-2 rounded-lg duration-[250ms] hover:bg-gray-300"
-      >
-        Create new note
-      </Link>
-    </div>
-  );
+  return <NotesList notes={getAllArchivedNotes()} type="archived" />;
 };
 
 export default ArchivedPage;
