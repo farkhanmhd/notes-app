@@ -8,6 +8,7 @@ import {
   getArchivedNotes,
   unarchiveNote,
   deleteNote,
+  editNote,
 } from "../utils/local-data";
 import PropTypes from "prop-types";
 
@@ -61,6 +62,12 @@ const NotesProvider = ({ children }) => {
     return foundedNote;
   };
 
+  const noteEdit = ({ id, title, body }) => {
+    let editedNote = getNote(id);
+    editedNote = editNote({ id, title, body });
+    return editedNote;
+  };
+
   return (
     <NotesContext.Provider
       value={{
@@ -74,6 +81,7 @@ const NotesProvider = ({ children }) => {
         noteUnArchive,
         noteDelete,
         searchNote,
+        noteEdit,
       }}
     >
       {children}

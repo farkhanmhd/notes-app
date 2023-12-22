@@ -1,4 +1,5 @@
 import ControlButton from "../ControlButton";
+import { BiSolidEdit } from "react-icons/bi";
 import {
   FiSave,
   FiBold,
@@ -21,6 +22,7 @@ const NotesControl = ({
   onRightAlign,
   onJustifyAlign,
   controlState,
+  editNote,
 }) => {
   return (
     <div
@@ -28,9 +30,15 @@ const NotesControl = ({
         !controlState ? "text-slate-800" : "text-slate-500"
       } shadow-md`}
     >
-      <ControlButton onClick={onSave} controlState={controlState}>
-        <FiSave />
-      </ControlButton>
+      {controlState ? (
+        <ControlButton controlState={!controlState}>
+          <BiSolidEdit onClick={editNote} className="text-slate-800" />
+        </ControlButton>
+      ) : (
+        <ControlButton>
+          <FiSave onClick={onSave} controlState={controlState} />
+        </ControlButton>
+      )}
       <ControlButton onClick={onBold} controlState={controlState}>
         <FiBold />
       </ControlButton>
@@ -66,6 +74,7 @@ NotesControl.propTypes = {
   onRightAlign: PropTypes.func,
   onJustifyAlign: PropTypes.func,
   controlState: PropTypes.bool.isRequired,
+  editNote: PropTypes.func,
 };
 
 export default NotesControl;

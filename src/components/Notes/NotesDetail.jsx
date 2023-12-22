@@ -10,8 +10,9 @@ import PropTypes from "prop-types";
 const NotesDetail = ({ mode, id = "" }) => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
-  const { addNewNote, openNote } = useNotes();
+  const { addNewNote, openNote, noteEdit } = useNotes();
   const navigate = useNavigate();
+  const [editState, setEditState] = useState(false);
 
   useEffect(() => {
     if (mode === "view") {
@@ -26,6 +27,12 @@ const NotesDetail = ({ mode, id = "" }) => {
     }
   }, [id, mode, openNote, navigate]);
 
+  useEffect(() => {
+    if (mode === "edit") {
+      setEditState(true);
+    }
+  }, [mode]);
+
   const titleChange = (event) => {
     setTitle(event.target.value);
   };
@@ -34,6 +41,11 @@ const NotesDetail = ({ mode, id = "" }) => {
   };
 
   const onSave = () => {
+    if (mode === "view") {
+      noteEdit({ id, title, body });
+      setEditState(false);
+      return;
+    }
     addNewNote({ title, body });
     navigate("/notes");
   };
@@ -64,12 +76,14 @@ const NotesDetail = ({ mode, id = "" }) => {
   const onRightAlign = () => textFormatter("Right");
   const onJustifyAlign = () => textFormatter("Full");
 
+  const editNote = () => setEditState(true);
+
   return (
     <div className="new-note p-6 w-[calc(100vw - 75px)] lg:w-[calc(100vw - 300px)] h-screen flex flex-col gap-5">
       <NotesTitleInput
         onChange={titleChange}
         title={title}
-        disabled={mode === "edit" ? false : true}
+        disabled={editState ? false : true}
       />
       <NotesControl
         onSave={onSave}
@@ -80,12 +94,10 @@ const NotesDetail = ({ mode, id = "" }) => {
         onCenterAlgin={onCenterAlign}
         onRightAlign={onRightAlign}
         onJustifyAlign={onJustifyAlign}
-        controlState={mode === "edit" ? false : true}
+        controlState={editState ? false : true}
+        editNote={editNote}
       />
-      <NotesBody
-        onInput={bodyChange}
-        editState={mode === "edit" ? true : false}
-      >
+      <NotesBody onInput={bodyChange} editState={editState ? true : false}>
         {parser(body)}
       </NotesBody>
     </div>

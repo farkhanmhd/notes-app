@@ -5,7 +5,7 @@ import SearchBar from "../Search/SearchBar";
 import { useState, useEffect } from "react";
 import { useNotes } from "../../context/NotesContext";
 
-const NotesList = ({ notes, type }) => {
+const NotesList = ({ notes, type, navState }) => {
   const [notesObj, setNotesObj] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchParams, setSearchParams] = useSearchParams();
@@ -39,7 +39,7 @@ const NotesList = ({ notes, type }) => {
   }, [searchTerm, notes, searchNote]);
 
   return (
-    <div className="w-[calc(100vw - 75px)] lg:w-[calc(100vw - 300px)] p-10 flex flex-col gap-10 min-h-screen">
+    <div className={`w-full p-10 flex flex-col gap-10 min-h-screen`}>
       {notes.length > 0 && (
         <h2 className="text-4xl text-gray-800 font-bold">
           {type === "archived" ? "Archived Notes List" : "Notes List"}
