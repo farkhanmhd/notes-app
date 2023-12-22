@@ -5,7 +5,7 @@ import SearchBar from "../Search/SearchBar";
 import { useState, useEffect } from "react";
 import { useNotes } from "../../context/NotesContext";
 
-const NotesList = ({ notes, type, navState }) => {
+const NotesList = ({ notes, type }) => {
   const [notesObj, setNotesObj] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchParams, setSearchParams] = useSearchParams();
