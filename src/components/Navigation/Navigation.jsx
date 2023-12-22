@@ -14,7 +14,7 @@ const Navigation = ({ navState, setNav }) => {
         className="w-[300px] px-7 py-3 flex items-center hover:bg-gray-700 duration-200"
       >
         {navState ? (
-          <RiCloseLine className="text-2xl mr-8" />
+          <RiCloseLine className="text-2xl mr-7" />
         ) : (
           <RiMenu2Fill className="text-xl mr-8" />
         )}
