@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { BsPlusCircle } from "react-icons/bs";
+import { BiSolidEdit } from "react-icons/bi";
 import { FaNoteSticky, FaBoxArchive } from "react-icons/fa6";
 
 const NavigationLinks = () => {
@@ -11,7 +11,7 @@ const NavigationLinks = () => {
       <ul className="flex flex-col ">
         <li className="w-[300px]">
           <Link to="/notes/new" className={linkClass}>
-            <BsPlusCircle /> New Notes
+            <BiSolidEdit className="text-xl" /> New Notes
           </Link>
         </li>
         <li className="w-[300px]">

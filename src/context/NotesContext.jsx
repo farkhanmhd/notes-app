@@ -54,6 +54,13 @@ const NotesProvider = ({ children }) => {
     return archivedNotes;
   };
 
+  const searchNote = (title, notesObj) => {
+    const foundedNote = notesObj.filter((note) =>
+      note.title.toLowerCase().includes(title)
+    );
+    return foundedNote;
+  };
+
   return (
     <NotesContext.Provider
       value={{
@@ -66,6 +73,7 @@ const NotesProvider = ({ children }) => {
         getAllArchivedNotes,
         noteUnArchive,
         noteDelete,
+        searchNote,
       }}
     >
       {children}
