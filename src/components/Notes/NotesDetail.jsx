@@ -23,6 +23,7 @@ const NotesDetail = ({ mode, id = "" }) => {
       }
       setTitle(note.title);
       setBody(note.body);
+      setEditState(false);
       document.getElementById("notes-body").innerHTML = note.body;
     }
   }, [id, mode, openNote, navigate]);
@@ -94,8 +95,8 @@ const NotesDetail = ({ mode, id = "" }) => {
         onCenterAlgin={onCenterAlign}
         onRightAlign={onRightAlign}
         onJustifyAlign={onJustifyAlign}
-        controlState={editState ? false : true}
         editNote={editNote}
+        controlState={editState ? false : true}
       />
       <NotesBody onInput={bodyChange} editState={editState ? true : false}>
         {parser(body)}

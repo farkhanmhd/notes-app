@@ -27,16 +27,16 @@ const NotesControl = ({
   return (
     <div
       className={`control flex items-center flex-wrap gap-x-2 w-full px-6 py-4 bg-slate-100 rounded-xl ${
-        !controlState ? "text-slate-800" : "text-slate-500"
+        controlState ? "text-slate-500" : "text-slate-800"
       } shadow-md`}
     >
       {controlState ? (
-        <ControlButton controlState={!controlState}>
-          <BiSolidEdit onClick={editNote} className="text-slate-800" />
+        <ControlButton controlState={!controlState} onClick={editNote}>
+          <BiSolidEdit className="text-slate-800" />
         </ControlButton>
       ) : (
-        <ControlButton>
-          <FiSave onClick={onSave} controlState={controlState} />
+        <ControlButton onClick={onSave} controlState={controlState}>
+          <FiSave />
         </ControlButton>
       )}
       <ControlButton onClick={onBold} controlState={controlState}>
