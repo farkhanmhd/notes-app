@@ -1,10 +1,13 @@
-import { useNotes } from "../context/NotesContext";
+// import { useEffect } from "react";
 import NotesList from "../components/Notes/NotesList";
+import { useNotes } from "../hooks/useNotes";
 
-const ArchivedPage = () => {
-  const { getAllArchivedNotes } = useNotes();
+const NotesPage = () => {
+  const { notes } = useNotes();
 
-  return <NotesList notes={getAllArchivedNotes()} type="archived" />;
+  return (
+    <NotesList notes={notes.filter((note) => note.archived)} type="archived" />
+  );
 };
 
-export default ArchivedPage;
+export default NotesPage;

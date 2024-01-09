@@ -2,31 +2,45 @@ import { useEffect, useState } from "react";
 import NotesTitleInput from "./NotesTitleInput";
 import NotesControl from "./NotesControl";
 import NotesBody from "./NotesBody";
-import { useNotes } from "../../context/NotesContext";
 import { useNavigate } from "react-router-dom";
 import parser from "html-react-parser";
 import PropTypes from "prop-types";
+import { getSingleNote, saveNote, deleteNote } from "../../utils/api";
+import { useNotes } from "../../hooks/useNotes";
 
 const NotesDetail = ({ mode, id = "" }) => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
-  const { addNewNote, openNote, noteEdit } = useNotes();
   const navigate = useNavigate();
   const [editState, setEditState] = useState(false);
+  const { updateNotes } = useNotes();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (mode === "view") {
-      const note = openNote(id);
-      if (!note) {
-        navigate("/error");
-        return;
+    const getNote = async () => {
+      try {
+        if (mode === "view") {
+          const note = await getSingleNote(id);
+          if (!note) {
+            navigate("/error");
+            return;
+          }
+          setTitle(note.title);
+          setBody(note.body);
+          setEditState(false);
+          setTimeout(() => {
+            setLoading(false);
+            document.getElementById("notes-body").innerHTML = note.body;
+          }, 500);
+        } else if (mode === "edit") {
+          setTimeout(() => setLoading(false), 500);
+        }
+      } catch {
+        console.error("Failed to get note");
       }
-      setTitle(note.title);
-      setBody(note.body);
-      setEditState(false);
-      document.getElementById("notes-body").innerHTML = note.body;
-    }
-  }, [id, mode, openNote, navigate]);
+    };
+    getNote();
+  }, [id, mode, navigate]);
 
   useEffect(() => {
     if (mode === "edit") {
@@ -41,13 +55,16 @@ const NotesDetail = ({ mode, id = "" }) => {
     setBody(event.target.innerHTML);
   };
 
-  const onSave = () => {
+  const onSave = async (id) => {
     if (mode === "view") {
-      noteEdit({ id, title, body });
+      await saveNote({ title, body });
+      await deleteNote(id);
+      await updateNotes();
       setEditState(false);
       return;
     }
-    addNewNote({ title, body });
+    await saveNote({ title, body });
+    await updateNotes();
     navigate("/notes");
   };
 
@@ -77,7 +94,20 @@ const NotesDetail = ({ mode, id = "" }) => {
   const onRightAlign = () => textFormatter("Right");
   const onJustifyAlign = () => textFormatter("Full");
 
-  const editNote = () => setEditState(true);
+  const editNote = () => {
+    if (window.location.pathname.startsWith("/archived")) {
+      return;
+    }
+    setEditState(true);
+  };
+
+  if (loading) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center">
+        <div className="loader"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="new-note p-6 w-[calc(100vw - 75px)] lg:w-[calc(100vw - 300px)] h-screen flex flex-col gap-5">
@@ -87,7 +117,7 @@ const NotesDetail = ({ mode, id = "" }) => {
         disabled={editState ? false : true}
       />
       <NotesControl
-        onSave={onSave}
+        onSave={() => onSave(id)}
         onBold={onBold}
         onItalic={onItalic}
         onUnderLine={onUnderline}
@@ -96,7 +126,13 @@ const NotesDetail = ({ mode, id = "" }) => {
         onRightAlign={onRightAlign}
         onJustifyAlign={onJustifyAlign}
         editNote={editNote}
-        controlState={editState ? false : true}
+        controlState={
+          !editState
+            ? true
+            : window.location.pathname.startsWith("/archived")
+            ? true
+            : false
+        }
       />
       <NotesBody onInput={bodyChange} editState={editState ? true : false}>
         {parser(body)}

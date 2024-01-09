@@ -4,10 +4,18 @@ const ControlButton = ({ onClick, children, controlState }) => {
   return (
     <button
       onClick={onClick}
-      className={`flex justify-center items-center text-2xl rounded-lg p-2 duration-[250ms] ${
-        !controlState ? "hover:bg-slate-200" : ""
+      className={`flex justify-center items-center text-2xl dark:text-slate-200 rounded-lg p-2 duration-[250ms] ${
+        window.location.pathname.startsWith("/archived/notes-")
+          ? ""
+          : !controlState
+          ? "hover:bg-slate-300 dark:hover:bg-gray-700"
+          : ""
       }`}
-      disabled={controlState}
+      disabled={
+        window.location.pathname.startsWith("/archived/notes-")
+          ? true
+          : controlState
+      }
     >
       {children}
     </button>

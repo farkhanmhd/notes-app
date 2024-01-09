@@ -1,8 +1,10 @@
 import NavigationLinks from "./NavigationLinks";
 import { RiMenu2Fill, RiCloseLine } from "react-icons/ri";
 import PropTypes from "prop-types";
+import { useLanguage } from "../../hooks/useLanguage";
 
-const Navigation = ({ navState, setNav }) => {
+const Navigation = ({ navState, setNav, onLogout }) => {
+  const { language } = useLanguage();
   return (
     <aside
       className={`bg-gray-800 fixed top-0 left-0 bottom-0 ${
@@ -14,13 +16,14 @@ const Navigation = ({ navState, setNav }) => {
         className="w-[300px] px-7 py-3 flex items-center hover:bg-gray-700 duration-200"
       >
         {navState ? (
-          <RiCloseLine className="text-2xl mr-7" />
+          <RiCloseLine className="text-2xl mr-7" onClick={setNav} />
         ) : (
-          <RiMenu2Fill className="text-xl mr-8" />
+          <RiMenu2Fill className="text-xl mr-8" onClick={setNav} />
         )}
-        Close Menu
+        {language === "en" ? "Close Menu" : "Tutup Menu"}
       </button>
-      <NavigationLinks />
+
+      <NavigationLinks onLogout={onLogout} />
     </aside>
   );
 };
@@ -28,6 +31,7 @@ const Navigation = ({ navState, setNav }) => {
 Navigation.propTypes = {
   navState: PropTypes.bool,
   setNav: PropTypes.func,
+  onLogout: PropTypes.func.isRequired,
 };
 
 export default Navigation;

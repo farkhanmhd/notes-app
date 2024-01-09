@@ -3,17 +3,28 @@ import Note from "./Note";
 import PropTypes from "prop-types";
 import SearchBar from "../Search/SearchBar";
 import { useState, useEffect } from "react";
-import { useNotes } from "../../context/NotesContext";
+import { useLanguage } from "../../hooks/useLanguage";
+import searchNote from "../../utils/util";
+import { useUser } from "../../hooks/useUser";
 
 const NotesList = ({ notes, type }) => {
   const [notesObj, setNotesObj] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchParams, setSearchParams] = useSearchParams();
-  const { searchNote } = useNotes();
+  const [notesLoading, setNotesLoading] = useState(true);
+  const { language } = useLanguage();
+  const { username } = useUser();
 
   useEffect(() => {
-    setNotesObj(notes);
-  }, [notes]);
+    if (notes.length > 0) {
+      setTimeout(() => {
+        setNotesObj(notes);
+        setNotesLoading(false);
+      }, 500);
+    } else {
+      setTimeout(() => setNotesLoading(false), 500);
+    }
+  }, []);
 
   useEffect(() => {
     const titleParam = searchParams.get("title");
@@ -36,13 +47,40 @@ const NotesList = ({ notes, type }) => {
   useEffect(() => {
     const searchResult = searchNote(searchTerm, notes);
     setNotesObj(searchResult);
-  }, [searchTerm, notes, searchNote]);
+  }, [searchTerm, notes]);
+
+  if (notesLoading) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center">
+        <div className="loader"></div>
+      </div>
+    );
+  }
+
+  let title, emptyNotes;
+
+  if (type === "active") {
+    title =
+      language === "en"
+        ? `${username}'s Active Notes`
+        : `Catatan Aktif ${username}`;
+    emptyNotes =
+      language === "en"
+        ? "There are no active notes"
+        : "Tidak ada catatan aktif";
+  } else if (type === "archived") {
+    title = language === "en" ? "Archived Notes" : "Catatan Terarsip";
+    emptyNotes =
+      language === "en"
+        ? "There are no archived notes"
+        : "Tidak ada catatan terarsip";
+  }
 
   return (
     <div className={`w-full p-10 flex flex-col gap-10 min-h-screen`}>
       {notes.length > 0 && (
-        <h2 className="text-4xl text-gray-800 font-bold">
-          {type === "archived" ? "Archived Notes List" : "Notes List"}
+        <h2 className="text-4xl text-gray-800 font-bold dark:text-slate-200">
+          {title}
         </h2>
       )}
 
@@ -59,26 +97,36 @@ const NotesList = ({ notes, type }) => {
             searchTerm ? "" : "m-auto"
           }`}
         >
-          <h1 className="text-3xl text-gray-800 font-bold text-center">
+          <h1 className="text-3xl text-gray-800 dark:text-slate-200 font-bold text-center">
             {searchTerm
-              ? `No results found for "${searchTerm}"`
-              : type === "archived"
-              ? "There are no archived notes"
-              : "There are no active notes"}
+              ? `${
+                  language === "en"
+                    ? `No results found for "${searchTerm}"`
+                    : `"${searchTerm}" Tidak ditemukan`
+                }`
+              : emptyNotes}
           </h1>
           <Link
             to={"/notes/new"}
-            className="bg-gray-100 text-gray-900 px-5 py-2 rounded-lg duration-[250ms] hover:bg-gray-300"
+            className="bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-slate-200 dark:hover:bg-gray-700 px-5 py-2 rounded-lg duration-[250ms] hover:bg-gray-300"
           >
-            Create new note
+            {language === "en" ? "Create new note" : "Buat catatan baru"}
           </Link>
         </div>
       )}
     </div>
   );
 };
+
+const noteItemPropTypes = {
+  id: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  body: PropTypes.string.isRequired,
+  createdAt: PropTypes.string.isRequired,
+};
+
 NotesList.propTypes = {
-  notes: PropTypes.arrayOf(PropTypes.object).isRequired,
+  notes: PropTypes.arrayOf(PropTypes.shape(noteItemPropTypes)).isRequired,
   type: PropTypes.oneOf(["active", "archived"]).isRequired,
 };
 

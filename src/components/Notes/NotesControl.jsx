@@ -26,13 +26,19 @@ const NotesControl = ({
 }) => {
   return (
     <div
-      className={`control flex items-center flex-wrap gap-x-2 w-full px-6 py-4 bg-slate-100 rounded-xl ${
+      className={`control flex items-center flex-wrap gap-x-2 w-full px-6 py-4 bg-slate-100 dark:bg-zinc-800 rounded-xl ${
         controlState ? "text-slate-500" : "text-slate-800"
       } shadow-md`}
     >
       {controlState ? (
         <ControlButton controlState={!controlState} onClick={editNote}>
-          <BiSolidEdit className="text-slate-800" />
+          <BiSolidEdit
+            className={`${
+              window.location.pathname.startsWith("/archived")
+                ? "text-slate-500 dark:text-slate-400"
+                : "text-slate-800 dark:text-slate-200"
+            }`}
+          />
         </ControlButton>
       ) : (
         <ControlButton onClick={onSave} controlState={controlState}>
