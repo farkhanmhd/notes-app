@@ -29,8 +29,8 @@ const UserForms = ({ type, onSubmit }) => {
   if (type === "login") {
     title =
       language === "en"
-        ? "Login to Notes Application"
-        : "Masuk ke Aplikasi Catatan";
+        ? "Login to Capella"
+        : "Masuk ke Capella";
     buttonText = language === "en" ? "Login" : "Masuk";
     accountText =
       language === "en" ? "Don't have an account?" : "Belum punya akun?";
